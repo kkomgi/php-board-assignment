@@ -1,0 +1,41 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: laravel_mysql
+    environment:
+      MYSQL_DATABASE: board_assignment
+      MYSQL_USER: board_user
+      MYSQL_PASSWORD: '!dksemfh2em'
+      MYSQL_ROOT_PASSWORD: '!dksemfh2em'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./:/var/www
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    container_name: laravel_app
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - db
+    entrypoint: ["/bin/bash", "/var/www/docker/entrypoint.sh"]
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: board_assignment
+      DB_USERNAME: board_user
+      DB_PASSWORD: '!dksemfh2em'
+
+volumes:
+  db_data:

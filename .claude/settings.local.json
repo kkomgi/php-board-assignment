@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm start)",
+      "Bash(PORT=3001 npm start)",
+      "WebFetch(domain:www.youtube.com)",
+      "Bash(mkdir:*)"
+    ],
+    "deny": []
+  }
+}
